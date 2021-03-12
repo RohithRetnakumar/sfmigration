@@ -1,0 +1,261 @@
+plugins {
+  id "com.jfrog.artifactory" version "4.8.1"
+ // id 'org.inferred.processors' version '2.1.0'
+}
+
+
+
+
+subprojects {
+	apply plugin: 'maven-publish'
+	apply plugin: 'com.jfrog.artifactory'		      
+    apply plugin: 'maven'
+    apply plugin: 'java-library'    
+   // apply plugin: 'org.inferred.processors'
+    apply plugin: 'eclipse'
+    sourceCompatibility = 1.9
+    targetCompatibility = 1.9
+
+    repositories {
+       mavenCentral()
+       maven {
+      url "https://plugins.gradle.org/m2/"
+    }
+       maven {
+            url "${artifactory_contextUrl}/gradle-dev-local"
+            credentials {
+                username = "${artifactory_user}"
+                password = "${artifactory_password}"
+            }
+        }
+    }
+
+task listAllDependencies(type: DependencyReportTask) {
+		println it	
+}
+
+ configurations.all {
+        resolutionStrategy.force 'com.google.guava:guava:25.0-jre'
+ }    
+
+
+sourceSets {
+
+both {
+    java {
+      srcDirs = ['src/main/java','src/generated/java','build/generated/wsdl']  
+      // exclude  'src/generated/java/*/inject/*.java'  
+    }
+  } 
+
+
+  dagger {
+    java {
+      srcDirs = ['src/generated/java','build/generated/wsdl']
+    }
+  } 
+
+  mainSrc {
+    java {
+      srcDirs = ['src/main/java','src/generated/java','build/generated/wsdl']
+      exclude '**/inject/Dagger*.java'
+      exclude '**/inject/*Factory.java'
+      exclude '**/inject/*Gen.java'
+
+    }
+  }  
+
+  mainPersistence {
+    java {
+      srcDirs = ['src/main/java','build/generated/wsdl']
+      include  '**/persistence/*.java'
+      include  '**/mapper/*.java'
+      include  '**/model/*.java'
+      include  '**/to/**.java'
+      include  '**/request/**.java'
+      include  '**/response/**.java'
+      include  '**/icap/*.java'
+      exclude  '**/persistence/*DaoImpl.java'
+    }
+  }  
+
+}
+
+
+
+configurations {
+	compileDagger
+	compileReds
+	compileMapstruct
+	compileDataNucleous
+}
+
+
+
+task datanucleusEnhance (){
+    description "Enhance JDO model classes using DataNucleus Enhancer"
+    dependsOn compileJava
+    doLast {    
+        // define the entity classes
+        def entityFiles = fileTree(sourceSets.main.output.classesDir).matching {
+            include '**/persistence/*Do.class'
+        }
+        println "Enhancing with DataNucleus the following files Base"
+        entityFiles.getFiles().each {
+            println it
+        }
+        // define Ant task for DataNucleus Enhancer
+        ant.taskdef(
+            name : 'datanucleusenhancer',
+            classpath : sourceSets.main.compileClasspath.asPath,
+           // classname : 'org.datanucleus.enhancer.EnhancerTask'
+            // the below is for DataNucleus Enhancer 3.1.1
+            classname : 'org.datanucleus.enhancer.tools.EnhancerTask'
+        )
+        // run the DataNucleus Enhancer as an Ant task
+        ant.datanucleusenhancer(
+            classpath: sourceSets.main.runtimeClasspath.asPath+sourceSets.main.compileClasspath.asPath,
+            verbose: true,
+            api: "JDO",
+            checkonly:false
+            ) {
+            entityFiles.addToAntBuilder(ant, 'fileset', FileCollection.AntType.FileSet)
+        }
+    }
+}
+
+classes.dependsOn(datanucleusEnhance)
+
+
+task generateMapStruct(type: JavaCompile, group: 'build', description: 'Generates the persistence') {
+  println 'Generating MapStruct....'    
+  source = sourceSets.mainPersistence.java   
+  classpath = configurations.compileClasspath + configurations.compileMapstruct 
+  options.compilerArgs += [
+      '-s', sourceSets.dagger.java.srcDirs.iterator().next()
+      ,'-processor', 'org.mapstruct.ap.MappingProcessor'
+  ]  
+  options.incremental = false
+  destinationDir = file('bin/')   
+}
+
+task generateDagger(type: JavaCompile, group: 'build', description: 'Generates the Code') {
+  println 'Generating Code...........'  
+  source = sourceSets.mainSrc.java    
+  //files('bin/main') + 
+  classpath =  configurations.compileClasspath + configurations.compileDagger  + configurations.compileReds 
+  options.compilerArgs += [
+      '-s', sourceSets.dagger.java.srcDirs.iterator().next() ,'-processor'
+      ,'com.reds.generator.redsannotationsprocessor.RedsAnnotationProcessor,dagger.internal.codegen.ComponentProcessor'
+  ] 
+  options.incremental = false
+  destinationDir = file('bin/')
+ }
+
+compileJava {   
+   dependsOn generateMapStruct
+   dependsOn generateDagger
+   source sourceSets.both.java 
+}
+
+
+
+
+dependencies {
+     	ext.daggerVersion = "2.19"
+     	compileOnly('com.reds.library:redscommons:1.0')
+     	testCompile('com.reds.library:redscommons:1.0')
+  		compileOnly('com.reds.library:redsutils:1.0') 
+  		testCompile('com.reds.library:redsutils:1.0') 
+  		compileOnly('com.reds.platform:servicecommons:1.0')  		
+  		compileOnly('com.reds.platform:redsplatformcommons:1.0')  		
+  		compileOnly ('javax.annotation:javax.annotation-api:1.3.2')  	    
+    	compileOnly "org.jfrog.buildinfo:build-info-extractor-gradle:4.8.1"
+    	compileOnly (group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.11.1')
+    	compileOnly (group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.11.1')
+    	testCompile group: 'org.testng', name: 'testng', version: '6.14.3'
+        compileOnly group: 'com.google.code.gson', name: 'gson', version: '2.8.5'
+        compileOnly group: 'org.simpleframework', name: 'simple-xml', version: '2.7.1'
+        compileOnly 'com.google.dagger:dagger:2.19'  		       
+  		compileOnly('com.reds.redsgenerator:redsannotations:1.0')
+  		compileOnly group: 'com.github.javaparser', name: 'javaparser-core', version: '3.8.0'
+  		// https://mvnrepository.com/artifact/javassist/javassist
+   		compileOnly group: 'javassist', name: 'javassist', version: '3.12.1.GA'
+  		compileDagger("com.google.dagger:dagger-compiler:2.19")
+
+  		// https://mvnrepository.com/artifact/org.mapstruct/mapstruct
+		compileOnly group: 'org.mapstruct', name: 'mapstruct', version: '1.2.0.Final'	
+	// https://mvnrepository.com/artifact/org.mapstruct/mapstruct-jdk8
+		compileOnly group: 'org.mapstruct', name: 'mapstruct-jdk8', version: '1.2.0.Final'		
+		// https://mvnrepository.com/artifact/org.mapstruct/mapstruct-processor
+		compileMapstruct('org.mapstruct:mapstruct-processor:1.2.0.Final')
+
+		//compileOnly group: 'org.datanucleus', name: 'javax.jdo', version: '3.2.0-m10'   
+  		//compileOnly('com.reds.services:datamanagementapi:1.0')
+  		//compileOnly('com.reds.services:webserverapi:1.0')
+
+
+  		compileOnly group: 'org.datanucleus', name: 'datanucleus-enhancer', version: '3.1.1'
+  		compileOnly group: 'org.datanucleus', name: 'datanucleus-core', version: '5.2.0-m3'
+	// https://mvnrepository.com/artifact/org.datanucleus/javax.jdo
+		compileOnly group: 'org.datanucleus', name: 'javax.jdo', version: '3.2.0-m10'
+	// https://mvnrepository.com/artifact/org.datanucleus/datanucleus-rdbms
+	//compile group: 'org.datanucleus', name: 'datanucleus-rdbms', version: '5.2.0-m3'	
+    // https://mvnrepository.com/artifact/org.datanucleus/datanucleus-api-jdo
+		compileOnly group: 'org.datanucleus', name: 'datanucleus-api-jdo', version: '5.2.0-m3'
+
+  		compileReds('com.reds.redsgenerator:redsannotationsprocessor:1.0'){
+ 		   exclude group: 'com.reds.redslibrary'
+  		  }   
+
+
+    }
+
+	group ='com.reds.services'
+    version = '1.0'
+
+    jar {
+        manifest.attributes provider: 'algols-platform-services'
+
+    }
+
+     publishing{
+    	publications{
+    		mavenJava(MavenPublication){
+    			  from components.java
+    		}
+   	 	}
+    }
+
+artifactory {
+  //clientConfig.setIncludeEnvVars(true)
+   // clientConfig.info.addEnvironmentProperty('test.adding.dynVar',new java.util.Date().toString())
+  contextUrl = "${artifactory_contextUrl}"  //The base Artifactory URL if not overridden by the publisher/resolver
+  publish {
+    contextUrl = "${artifactory_contextUrl}"   //The base Artifactory URL for the publisher
+    repository {    
+      repoKey = 'gradle-dev-local'  //The Artifactory repository key to publish to
+      username = "${artifactory_user}"         //The publisher user name
+      password = "${artifactory_password}" 
+      maven = true
+
+    }
+    defaults {
+    	publishBuildInfo = true  
+        publications ('mavenJava')        
+        properties = ['qa.level': 'basic', 'q.os': 'win32, deb, osx']  //Optional map of properties to attach to all published artifacts
+        publishArtifacts = true   //Publish artifacts to Artifactory (true by default)
+        publishPom = true   //Publish generated POM files to Artifactory (true by default).         
+    }
+  }  
+    //clientConfig.info.setBuildName('new-strange-name')
+    //clientConfig.info.setBuildNumber('' + new java.util.Random(System.currentTimeMillis()).nextInt(20000))
+}
+
+}
+
+
+allprojects {
+    //apply plugin: "com.jfrog.artifactory"
+}
+

@@ -1,0 +1,7 @@
+<cassandraloaderConfig>
+   <id>CassandraloaderConfig</id>
+   <description>Configurations for Cassandraloader</description>
+   <nodeAddress>localhost</nodeAddress>
+   <keyspaceName>sf_inventory</keyspaceName>
+   <outputMode>CSV</outputMode>
+</cassandraloaderConfig>

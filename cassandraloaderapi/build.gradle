@@ -1,0 +1,6 @@
+dependencies { 
+ compileOnly('com.reds.library:redscommons:1.0')
+  implementation 'com.reds.services:datamanagementapi:1.0'
+  implementation 'com.reds.services:fileadapterapi:1.0'
+  implementation 'com.reds.services:eventmanagementapi:1.0'
+}

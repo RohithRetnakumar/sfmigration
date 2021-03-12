@@ -1,0 +1,13 @@
+<trackerConfig>
+   <id>trackerconfig</id>
+   <name>platform</name>
+   <statusLevel>WARN</statusLevel>
+   <level>TRACE</level>
+   <pattern>%d [%t] %-5level: %msg%n%throwable</pattern>
+   <cronTriggeringSchedule>0 0 0 * * ?</cronTriggeringSchedule>
+   <rollBackFileSize>100M</rollBackFileSize>
+   <fileName>./logs/platform.log</fileName>
+   <archiveFilePattern>logs/archive/platform-%d{MM-dd-yy}.log.gz</archiveFilePattern>
+   <additivity>false</additivity>
+   <consoleRequired>true</consoleRequired>
+</trackerConfig>

@@ -1,0 +1,23 @@
+<serviceInfoPersistanceObject>
+   <information>
+      <serviceLocation>./redspot/FileAdapter1.0\</serviceLocation>
+      <serviceLibs>./redspot/FileAdapter1.0\\lib/</serviceLibs>
+      <serviceConfigLocation>./redspot/FileAdapter1.0\\config/</serviceConfigLocation>
+      <metaData>
+         <type>PLATFORM</type>
+         <name>FileAdapter</name>
+         <version>1.0</version>
+         <implementation>com.reds.service.fileadapter.FileAdapterImpl</implementation>
+         <managedLib>false</managedLib>
+         <category>PLATFORM Service</category>
+         <description>Services can use this service to scan configured input
+		folder. Reads any file founds and intimate the configured data
+		adapters. </description>
+         <icon>FileAdapter1.0.jpg</icon>
+         <owner>Algol Soft</owner>
+      </metaData>
+      <status>STARTED</status>
+      <lastUpdatedTime>1609310687146</lastUpdatedTime>
+      <serviceIcon>.//marketplace/icon/\FileAdapter1.0.jpg</serviceIcon>
+   </information>
+</serviceInfoPersistanceObject>

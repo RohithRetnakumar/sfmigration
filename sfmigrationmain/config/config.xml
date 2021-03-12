@@ -1,0 +1,8 @@
+<platformmanagementConfig>
+   <id>config</id>
+   <description>Configurations for platformmanagement</description>
+   <communicationChannelConfig>
+      <channelName>redschannel</channelName>
+      <channelPort>9999</channelPort>
+   </communicationChannelConfig>
+</platformmanagementConfig>

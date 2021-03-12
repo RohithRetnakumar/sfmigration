@@ -1,0 +1,21 @@
+<materialMasterConfig>
+   <adapterName>MaterialMasterAdapter</adapterName>
+   <fileType>DELIMITED</fileType>
+   <archivePath>./bucket/material/archive/</archivePath>
+   <rejectPath>./bucket/material/filereject/</rejectPath>
+   <recordRejectPath>./bucket/material/recordreject/</recordRejectPath>
+   <charSet>ISO_8859_1</charSet>
+   <recordDelimiter>NEW_LINE</recordDelimiter>
+   <fieldDelimiter>PIPE</fieldDelimiter>
+   <inputPath>./bucket/material/input/</inputPath>
+   <dotDoneRequired>true</dotDoneRequired>
+   <maxInputFiles>5</maxInputFiles>
+   <handlerThreads>2</handlerThreads>
+   <batchSize>100000</batchSize>
+   <ignoreHeader>true</ignoreHeader>
+   <headerCount>0</headerCount>
+   <ignoreFooter>true</ignoreFooter>
+   <footerCount>0</footerCount>
+   <id>MaterialMasterConfig</id>
+   <description>Adaptor for Material Master Config</description>
+</materialMasterConfig>

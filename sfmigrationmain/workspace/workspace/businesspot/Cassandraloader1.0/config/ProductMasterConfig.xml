@@ -1,0 +1,21 @@
+<productMasterConfig>
+   <adapterName>ProductMasterAdapter</adapterName>
+   <fileType>DELIMITED</fileType>
+   <archivePath>./bucket/product/archive/</archivePath>
+   <rejectPath>./bucket/product/filereject/</rejectPath>
+   <recordRejectPath>./bucket/product/recordreject/</recordRejectPath>
+   <charSet>UTF_8</charSet>
+   <recordDelimiter>NEW_LINE</recordDelimiter>
+   <fieldDelimiter>PIPE</fieldDelimiter>
+   <inputPath>./bucket/product/input/</inputPath>
+   <dotDoneRequired>true</dotDoneRequired>
+   <maxInputFiles>5</maxInputFiles>
+   <handlerThreads>2</handlerThreads>
+   <batchSize>20000</batchSize>
+   <ignoreHeader>true</ignoreHeader>
+   <headerCount>0</headerCount>
+   <ignoreFooter>true</ignoreFooter>
+   <footerCount>0</footerCount>
+   <id>ProductMasterConfig</id>
+   <description>Adaptor for Product Master Config</description>
+</productMasterConfig>

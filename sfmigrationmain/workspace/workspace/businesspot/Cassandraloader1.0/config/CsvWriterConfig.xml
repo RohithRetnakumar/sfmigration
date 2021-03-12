@@ -1,0 +1,9 @@
+<csvWriterConfig>
+   <id>CsvWriterConfig</id>
+   <description>Configurations for Csv output Mode</description>
+   <assetDetailOutputPath>./bucket/assetmain/output/</assetDetailOutputPath>
+   <transactionHistoryOutputPath>./bucket/transhistory/output/</transactionHistoryOutputPath>
+   <productOutputPath>./bucket/product/output/</productOutputPath>
+   <fieldDelimiter>|</fieldDelimiter>
+   <doneFileOnCompletion>true</doneFileOnCompletion>
+</csvWriterConfig>

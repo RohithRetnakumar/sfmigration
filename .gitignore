@@ -1,0 +1,7 @@
+*.class
+*.bin
+/.gradle/
+*.jar
+cassandraloader/bin/
+cassandraloaderapi/bin/
+sfmigrationmain/bin/

@@ -1,0 +1,21 @@
+<serviceInfoPersistanceObject>
+   <information>
+      <serviceLocation>./redspot/EventManagement1.0\</serviceLocation>
+      <serviceLibs>./redspot/EventManagement1.0\\lib/</serviceLibs>
+      <serviceConfigLocation>./redspot/EventManagement1.0\\config/</serviceConfigLocation>
+      <metaData>
+         <type>PLATFORM</type>
+         <name>EventManagement</name>
+         <version>1.0</version>
+         <implementation>com.reds.service.eventmanagement.EventManagementImpl</implementation>
+         <managedLib>false</managedLib>
+         <category>PLATFORM General</category>
+         <description>TODO </description>
+         <icon>EventManagement1.0.jpg</icon>
+         <owner>Algol Soft</owner>
+      </metaData>
+      <status>STARTED</status>
+      <lastUpdatedTime>1609310687046</lastUpdatedTime>
+      <serviceIcon>.//marketplace/icon/\EventManagement1.0.jpg</serviceIcon>
+   </information>
+</serviceInfoPersistanceObject>

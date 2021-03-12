@@ -1,0 +1,21 @@
+<assertMainDetailsConfig>
+   <adapterName>AssertMainDetailsAdapter</adapterName>
+   <fileType>DELIMITED</fileType>
+   <archivePath>./bucket/assetmain/archive/</archivePath>
+   <rejectPath>./bucket/assetmain/filereject/</rejectPath>
+   <recordRejectPath>./bucket/assetmain/recordreject/</recordRejectPath>
+   <charSet>UTF_8</charSet>
+   <recordDelimiter>NEW_LINE</recordDelimiter>
+   <fieldDelimiter>PIPE</fieldDelimiter>
+   <inputPath>./bucket/assetmain/input/</inputPath>
+   <dotDoneRequired>true</dotDoneRequired>
+   <maxInputFiles>5</maxInputFiles>
+   <handlerThreads>4</handlerThreads>
+   <batchSize>1000</batchSize>
+   <ignoreHeader>true</ignoreHeader>
+   <headerCount>0</headerCount>
+   <ignoreFooter>true</ignoreFooter>
+   <footerCount>0</footerCount>
+   <id>AssertMainDetailsConfig</id>
+   <description>Adaptor for Assert Main Details</description>
+</assertMainDetailsConfig>

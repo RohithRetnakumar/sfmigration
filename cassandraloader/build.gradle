@@ -1,0 +1,39 @@
+apply plugin: 'java-library'
+def  serviceName = 'Cassandraloader'
+def serviceVersion = '1_0'
+
+
+task copyArtifact(type: Copy) {			
+  			from "$buildDir/libs"
+  			into "release/${serviceName}${serviceVersion}/"  			
+		}	
+task copyDependencies(type: Copy) {				
+  			from configurations.default
+  			into "release/${serviceName}${serviceVersion}/lib"  			
+  			dependsOn copyArtifact
+		}
+task copyResource(type: Copy) {  					
+  			from sourceSets.main.resources
+  			into "release/${serviceName}${serviceVersion}"			
+  			dependsOn copyDependencies
+		}
+task releaseService(type: Zip,group: 'build', description: 'Releasing Service') {
+    archiveName = "${serviceName}_${serviceVersion}.zip"
+    destinationDir = file("release/")
+    from "release/${serviceName}${serviceVersion}"
+    dependsOn copyResource
+}	
+
+	jar {   	
+    	baseName "${serviceName}"    
+	}
+
+dependencies {  
+  implementation project(':cassandraloaderapi')
+  implementation 'com.reds.platform:redsplatformcommons:1.0'  
+  implementation 'com.reds.services:datamanagementapi:1.0'
+  implementation 'com.reds.services:fileadapterapi:1.0'
+  implementation 'com.reds.services:eventmanagementapi:1.0'
+  compile group: 'com.datastax.cassandra', name: 'cassandra-driver-core', version: '3.10.0'
+  //compile group: 'com.datastax.oss', name: 'java-driver-core', version: '4.7.2'
+}

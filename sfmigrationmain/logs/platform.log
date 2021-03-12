@@ -1,0 +1,36 @@
+2020-07-30 14:09:45,297 [main] INFO : _______________Starting Platform_______________
+2020-07-30 14:09:45,618 [main] ERROR: Failed to start platform management
+java.lang.IllegalStateException: Cannot read stream
+	at com.reds.platform.platformmanagement.command.CommandShell.readBanner(CommandShell.java:41)
+	at com.reds.platform.platformmanagement.command.CommandShell.<init>(CommandShell.java:15)
+	at com.reds.platform.platformmanagement.inject.PlatformmanagementModule.provideCommandShell(PlatformmanagementModule.java:76)
+	at com.reds.platform.platformmanagement.inject.PlatformmanagementModule_ProvideCommandShellFactory.proxyProvideCommandShell(PlatformmanagementModule_ProvideCommandShellFactory.java:36)
+	at com.reds.platform.platformmanagement.inject.PlatformmanagementModule_ProvideCommandShellFactory.provideInstance(PlatformmanagementModule_ProvideCommandShellFactory.java:26)
+	at com.reds.platform.platformmanagement.inject.PlatformmanagementModule_ProvideCommandShellFactory.get(PlatformmanagementModule_ProvideCommandShellFactory.java:22)
+	at com.reds.platform.platformmanagement.inject.PlatformmanagementModule_ProvideCommandShellFactory.get(PlatformmanagementModule_ProvideCommandShellFactory.java:8)
+	at dagger.internal.DoubleCheck.get(DoubleCheck.java:47)
+	at com.reds.platform.platformmanagement.inject.DaggerPlatformmanagementComponent.takeCommandShell(DaggerPlatformmanagementComponent.java:138)
+	at com.reds.platform.platformmanagement.command.CommandControlImpl.<init>(CommandControlImpl.java:23)
+	at com.reds.platform.platformmanagement.inject.PlatformmanagementModule.provideCommandControl(PlatformmanagementModule.java:64)
+	at com.reds.platform.platformmanagement.inject.PlatformmanagementModule_ProvideCommandControlFactory.proxyProvideCommandControl(PlatformmanagementModule_ProvideCommandControlFactory.java:36)
+	at com.reds.platform.platformmanagement.inject.PlatformmanagementModule_ProvideCommandControlFactory.provideInstance(PlatformmanagementModule_ProvideCommandControlFactory.java:26)
+	at com.reds.platform.platformmanagement.inject.PlatformmanagementModule_ProvideCommandControlFactory.get(PlatformmanagementModule_ProvideCommandControlFactory.java:22)
+	at com.reds.platform.platformmanagement.inject.PlatformmanagementModule_ProvideCommandControlFactory.get(PlatformmanagementModule_ProvideCommandControlFactory.java:8)
+	at dagger.internal.DoubleCheck.get(DoubleCheck.java:47)
+	at com.reds.platform.platformmanagement.inject.DaggerPlatformmanagementComponent.takeCommandControl(DaggerPlatformmanagementComponent.java:128)
+	at com.reds.platform.platformmanagement.PlatformmanagementManager.start(PlatformmanagementManager.java:62)
+	at com.reds.platform.platformmanagement.Platform.main(Platform.java:21)
+	at com.reds.service.sfmigrationmain.SfMigrationMain.main(SfMigrationMain.java:13)
+Caused by: java.nio.file.NoSuchFileException: .\config\banner.txt
+	at java.base/sun.nio.fs.WindowsException.translateToIOException(WindowsException.java:85)
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:103)
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:108)
+	at java.base/sun.nio.fs.WindowsFileSystemProvider.newByteChannel(WindowsFileSystemProvider.java:231)
+	at java.base/java.nio.file.Files.newByteChannel(Files.java:369)
+	at java.base/java.nio.file.Files.newByteChannel(Files.java:415)
+	at java.base/java.nio.file.Files.readAllBytes(Files.java:3207)
+	at com.reds.platform.platformmanagement.command.CommandShell.readFileAsString(CommandShell.java:48)
+	at com.reds.platform.platformmanagement.command.CommandShell.readBanner(CommandShell.java:38)
+	... 19 more
+2020-07-30 14:09:45,623 [Thread-0] INFO : Platform Stop Initiated......
+2020-07-30 14:09:45,624 [Thread-0] INFO : ______________ Platform Stopped______________
